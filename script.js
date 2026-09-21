@@ -9,11 +9,15 @@ let msgElem;
 let fruitNames;
 // Innehåller en variabel med numret på vald frukt
 let fruitNr;
+//
+let selFruitsElem;
 
 // Funktion som körs då hela webbsidan är inladdad, dvs då all HTML-kod är utförd.
 // Initiering av globala variabler samt koppling avfunktioner till knapparna.
 function init() {
     let button1;
+    let button2;
+    let button3;
 
 	inputElem = [];
     inputElem[1] = document.getElementById("input1");
@@ -31,6 +35,8 @@ function init() {
 
     fruitNr = 0;
 
+    selFruitsElem = document.getElementById("selectedFruits");
+
     button1 = document.getElementById("btn1");
     button1.addEventListener("click", e=>{
         showFruit();
@@ -39,6 +45,10 @@ function init() {
     button2 = document.getElementById("btn2");
     button2.addEventListener("click", e =>{
         checkName();
+
+    button3 = document.getElementById("btn3");
+    button3.addEventListener("click", e =>{
+        addFruits();
     })
 } // End init
 window.onload = init; // Se till att init aktiveras då sidan är inladdad
@@ -57,22 +67,10 @@ function showFruit(){
     // Refererar till img-taggen och används senare för att byta src URL
     let fruitImg;
 
-    nr = inputElem[1].value;
-
-    if(isNaN(nr)){
-       msgElem.textContent = "Skriv enbart i nummer, inga andra tecken är tillåtna";
-
-       return;
+    nr = getNr(1, 5);
+    if(getNr === null){
+        return;
     }
-
-    if(nr < 1 || nr > 5){
-       msgElem.textContent = "Skriv enbart i nummer mellan 1 till 5";
-
-       return;
-    }
-
-    nr = parseInt(nr);
-    document.getElementById("input1").value = nr;
 
     fruitUrl = `pics/fruit${nr}.jpg`;
 
@@ -91,6 +89,8 @@ function checkName(){
 
     if(fruitNr === 0){
         msgElem.textContent = "Du måste välja en frukt först";
+
+        return;
     }
 
     if(name === fruitNames[fruitNr]){
@@ -101,6 +101,45 @@ function checkName(){
     else{
         msgElem.textContent = "Fel namn";
 
+        return;
+    }
+}
+
+function getNr(elemNr, high){
+    let nr;
+
+    nr = inputElem[elemNr].value;
+
+    if(isNaN(nr)){
+       msgElem.textContent = "Skriv enbart i nummer, inga andra tecken är tillåtna";
+
+       return null;
+    }
+
+    if(nr < 1 || nr > high){
+       msgElem.textContent = "Skriv enbart i nummer mellan 1 till 5";
+
+       return null;
+    }
+
+    nr = parseInt(nr);
+    inputElem[1].value = nr;
+
+    inputElem[elemNr].value = nr;
+
+    return nr;
+}
+
+function addFruits(){
+    let amount;
+    let imgList;
+
+    if(fruitNr === 0){
+        return;
+    }
+
+    amount = getNr(3, 9);
+    if(amount === null){
         return;
     }
 }
